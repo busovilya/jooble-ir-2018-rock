@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>First app</title>
+    <link rel="stylesheet" href="static/style.css">  
+    <style>
+        
+        #text {
+            color: black;
+            padding: 1em;
+            text-align: center;
+        }
+        
+        .center {
+            margin: auto;
+            padding: 15px 15px;
+            text-align: center;
+            text-decoration: none;
+                       
+        }        
+             
+        input[type=submit] {
+            width: 10%;
+            background-color: #ccc; 
+            border: none;
+            color: black;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+        }        
+        
+       input[type=text] {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: white;
+            padding: 12px 20px 12px 20px;
+        }              
+    </style>   
+</head>
+
+<body>
+    <div id="text">What are you looking for?</div>
+    <form method=post action="/search">
+        <div>
+            <input type="text" name="query" >
+        </div>
+        <div class="center">
+            <input type=submit value='Search' name='submit_btn' placeholder="Search..">
+        </div>
+    </form>
+</body>
+
+</html>
