@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <title>First app</title>
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+        
+        #result {
+            width: 60%;
+            text-align: left;
+            padding-top: 5px;
+            
+        }
+        
+        li {
+            float: left;
+            font-size: 24px;
+            padding-top: 20px;
+        }       
+      
+       input[type=text] {
+            width: 60%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: white;
+            padding: 12px 20px 12px 20px;
+        }              
+    </style>   
+</head>
+
+<body>
+    <form method=post action="/search">
+        <input type="text" name="query" placeholder="Search..">               
+    </form>
+    
+    <div id='result'>              
+        <ul style="list-style-type:none">
+          <li>{{ result[0] }}</li>
+          <li>{{ result[1] }}</li>
+          <li>{{ result[2] }}</li>
+          <li>{{ result[3] }}</li>
+          <li>{{ result[4] }}</li>
+          <li>{{ result[5] }}</li>
+          <li>{{ result[6] }}</li>
+          <li>{{ result[7] }}</li>
+          <li>{{ result[8] }}</li>
+          <li>{{ result[9] }}</li>
+        </ul>
+    </div>
+</body>
+</html>
