@@ -1,4 +1,4 @@
-Run all services mentioned above and open UI client to do search
+Run all services mentioned above and open UI client to do search. 
 Link to view diagram: http://afly.co/2ds
 
 # Search service : main manager for all workflow.
