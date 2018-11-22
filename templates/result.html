@@ -4,22 +4,46 @@
     <title>First app</title>
     <link rel="stylesheet" href="static/style.css">
     <style>
+   
+    .content {
+        margin-top: 30px;
+        margin-left: 30px;
+        width: 60%;
+        overflow: hidden;
+        background-color: white;
+    }
+
+    #block {
+        display: block;
+        color: black;
+        text-align: left;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    #title {
+        color: blue;
+        font-size: 22px;
+        text-decoration: None;
         
-        #result {
-            width: 60%;
-            text-align: left;
-            padding-top: 5px;
-            
-        }
+        text-decoration: none;
+    }
+
+
+    /* Change color on hover */
+    #title:hover {
+        text-decoration: underline;
+    }
+    
+    #title:visited {
+        color: pink;
+        text-decoration: none;
+    }
         
-        li {
-            float: left;
-            font-size: 24px;
-            padding-top: 20px;
-        }       
-      
        input[type=text] {
             width: 60%;
+            margin-left: 25px;
+            margin-top: 15px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -34,20 +58,59 @@
     <form method=post action="/search">
         <input type="text" name="query" placeholder="Search..">               
     </form>
-    
-    <div id='result'>              
-        <ul style="list-style-type:none">
-          <li>{{ result[0] }}</li>
-          <li>{{ result[1] }}</li>
-          <li>{{ result[2] }}</li>
-          <li>{{ result[3] }}</li>
-          <li>{{ result[4] }}</li>
-          <li>{{ result[5] }}</li>
-          <li>{{ result[6] }}</li>
-          <li>{{ result[7] }}</li>
-          <li>{{ result[8] }}</li>
-          <li>{{ result[9] }}</li>
-        </ul>
+            
+    <div class="content">
+      <div id='block'>
+        <a id='title' href='{{ url[0] }}' target="_blank">{{ title[0] }}</a>
+        <div>{{ snippet[0] }}</div>
+      </div>
+        
+     <div id='block'>
+        <a id='title' href='{{ url[1] }}' target="_blank">{{ title[1] }}</a>
+        <div>{{ snippet[1] }}</div>
+      </div>
+        
+      <div id='block'>
+        <a id='title' href='{{ url[2] }}' target="_blank">{{ title[2] }}</a>
+        <div>{{ snippet[2] }}</div>
+      </div>
+        
+      <div id='block'>
+        <a id='title' href='{{ url[3] }}' target="_blank">{{ title[3] }}</a>
+        <div>{{ snippet[3] }}</div>
+      </div>
+        
+      <div id='block'>
+        <a id='title' href='{{ url[4] }}' target="_blank">{{ title[4] }}</a>
+        <div>{{ snippet[4] }}</div>
+      </div>
+        
+      <div id='block'>
+        <a id='title' href='{{ url[5] }}' target="_blank">{{ title[5] }}</a>
+        <div>{{ snippet[5] }}</div>
+      </div>
+        
+      <div id='block'>
+        <a id='title' href='{{ url[6] }}' target="_blank">{{ title[6] }}</a>
+        <div>{{ snippet[6] }}</div>
+      </div>
+        
+      <div id='block'>
+        <a id='title' href='{{ url[7] }}' target="_blank">{{ title[7] }}</a>
+        <div>{{ snippet[7] }}</div>
+      </div>
+                
+      <div id='block'>
+        <a id='title' href='{{ url[8] }}' target="_blank">{{ title[8] }}</a>
+        <div>{{ snippet[8] }}</div>
+      </div>
+        
+      <div id='block'>
+        <a id='title' href='{{ url[9] }}' target="_blank">{{ title[9] }}</a>
+        <div>{{ snippet[9] }}</div>
+      </div>
+        
     </div>
+    
 </body>
 </html>
