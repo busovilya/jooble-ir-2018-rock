@@ -37,18 +37,28 @@ Input:
 It uses word_tokenize from nltk.tokenize.
 
 Return:
-- processed_data - list of tokens.
+- processed_data - list of lists of tokens.
+
+# StopWords service : drops stop words.
+Port: 13536
+
+Input: 
+- data - list of lists of tokens. 
+It uses stopwords from nltk.corpus.
+
+Return:
+- processed_data - list of lists tokens.
 
 # Stemming service : stemmer for recieved list of tokens.
 Port: 13535
 
 Input: 
-- data - list of tokens. 
+- data - list of lists of tokens. 
 
 It uses nltk.stem.porter.
 
 Return:
-- processed_data - list of term.
+- processed_data - list of lists of term.
 
 # Service ReverseIndex : executes search by term in inverted index.
 Port: 13538
@@ -63,7 +73,7 @@ Actions:
 
 Return: processed_data - dictionary with docID's and texts (number of docID == max_docs). {'id': docID, 'text': text}
 
-# Snippets service : creates snippet - first 50 characters for each text.
+# Snippets service : creates snippet - first sentence which contains any term from query.
 Port: 13542
 
 Input: 
