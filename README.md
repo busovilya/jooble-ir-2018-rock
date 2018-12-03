@@ -85,4 +85,22 @@ Return: processed_data - dictionary with docID's and snippets. {'id': docID, 'sn
 Port: 13560
 
 You can change 'max_docs' here.
-  1. request to service Search -> recieve json with key "documents" - dictionary with docID's and snippets.
+Actions: 
+  1. request to service SpellChecker -> recieve json with key "state" - equal 1 if mistakes were found else 0, 
+  "processed_data" - correct query.
+  2. request to service Search -> recieve json with key "documents" - dictionary with docID's and snippets.
+  
+# Service SpellChecker : checks query for mistakes and returns correct query if any were found.
+Port: 13539
+
+You need to create class object with language model which can be obtained from "Data/list_of_words.pickle"
+
+Input: 
+- query - query from user. 
+
+Actions: 
+  1. request to service Tokenizing ->  receive json with key "processed_data" - list of tokens.
+  
+Return:
+- processed_data - correct query (type str)
+- state - equal 1 if mistakes were found else 0.
