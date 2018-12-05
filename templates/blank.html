@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+    <title>First app</title>
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+   
+
+    #answer {
+        margin-top: 30px;
+        font-size: 24px;
+        margin-left: 30px;
+        width: 60%;
+        overflow: hidden;
+        background-color: white;
+    }
+        
+    #sorry {
+        font-size:14px;
+        margin-left: 30px;
+        width: 60%;
+        overflow: hidden;
+        background-color: white;
+    }
+        
+    #block {
+        display: block;
+        color: black;
+        text-align: left;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+
+   input[type=text] {
+        width: 60%;
+        margin-left: 25px;
+        margin-top: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 12px;
+        background-color: white;
+        padding: 12px 20px 12px 20px;
+    }              
+    </style>   
+</head>
+
+<body>
+    <form method=post action="/search">
+        <input type="text" name="query" placeholder="{{ old_query }}">               
+    </form>
+            
+    <div id="answer">
+      <div id='block'>
+          <div><i>The answer is 42!</i></div>
+      </div>   
+    </div>
+    
+     <div id="sorry">
+      <div id='block'>
+          <div>Sorry we can't help you. Try another query. </div>
+      </div>   
+    </div>   
+  
+</body>
+</html>
