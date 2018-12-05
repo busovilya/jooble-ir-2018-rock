@@ -73,6 +73,17 @@ Actions:
 
 Return: processed_data - dictionary with docID's and texts (number of docID == max_docs). {'id': docID, 'text': text}
 
+# Service Ranking : executes ranking by using cosine between two vectors.
+Port: 13541
+
+Before using this service for ranking you must create idf and normalized tf_idf from inverted index by using ReverseIndex Service.
+
+Input: 
+ - documents - list with relevant docID
+ - words - list with tokens from the query. 
+
+Return: ranked - list with ranked docIDs
+
 # Snippets service : creates snippet - first sentence which contains any term from query.
 Port: 13542
 
