@@ -84,11 +84,11 @@
 </head>
 
 <body>
+    <form method=post action="/search" name="Input">
     <div class="row">
-        <div class="column left">    
-            <form method=post action="/search">
-                <input type="text" name="query" placeholder="{{ old_query }}">               
-            </form>
+        <div class="column left">                
+                <input type="text" name="query" placeholder="{{ old_query }}">            
+            
 
             <div class="content">
               <div id='block'>
@@ -147,7 +147,7 @@
         <div class="column right">
             <div style='margin-top: 90px; margin-left:5px;'>
                 <h3>Free! Only today you can choose category:</h3>
-                <form name="Form">
+                
                   <input type="checkbox" name="category" value="bank" id='cat'> Банки, инвестиции, лизинг<br>
                   <input type="checkbox" name="category" value="lawyer" id='cat'> Юристы<br>
                   <input type="checkbox" name="category" value="it" id='cat'> Информационные технологии, интернет, телеком<br>
@@ -155,26 +155,26 @@
                   <input type="checkbox" name="category" value="production" id='cat'> Производство<br> 
                   <input type="checkbox" name="category" value="fitness" id='cat'> Спортивные клубы, фитнес, салоны красоты<br> 
                   <input type="checkbox" name="category" value="restaurant" id='cat'> Туризм, гостиницы, рестораны<br> 
-                </form> 
+                  <input type="checkbox" name="category" value="none" id='cat' checked hidden><br>                                         
                 
-                <script>
-                var f = document.forms.Form;
-                f.onchange = function() {
-                  var n = f.querySelectorAll('[type="checkbox"]'),
-                      l = f.querySelectorAll('[type="checkbox"]:checked');
-                  for(var j=0; j<n.length; j++)
-                    if (l.length >= 1) { // если отметить три и более галочки
-                      n[j].disabled = true; // все чекбоксы становятся disabled
-                      for(var i=0; i<l.length; i++)
-                        l[i].disabled = false; // но disabled убирается с помеченных галочками чекбоксов
-                    } else {
-                      n[j].disabled = false; // если выделить менее трёх галочек, то disabled снимается со всех чекбоксов
-                    }
-                }
-                </script>
             </div>
         </div>  
     </div>
-    
+</form>
+    <script>
+        var f = document.forms.Input;
+        f.onchange = function() {
+          var n = f.querySelectorAll('[type="checkbox"]'),
+              l = f.querySelectorAll('[type="checkbox"]:checked');
+          for(var j=0; j<n.length; j++)
+            if (l.length >= 2) { // если отметить одну и более галочки
+              n[j].disabled = true; // все чекбоксы становятся disabled
+              for(var i=0; i<l.length; i++)
+                l[i].disabled = false; // но disabled убирается с помеченных галочками чекбоксов
+            } else {
+              n[j].disabled = false; // если выделить менее одной галочек, то disabled снимается со всех чекбоксов
+            }
+        }
+    </script>
 </body>
 </html>
