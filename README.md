@@ -68,10 +68,21 @@ Input:
  - max_docs - maximum number of documents returned by the search engine. 
 
 Actions:  
-  1. You can find function create_inverted_index() for creating inverted index from "eval_texts.csv" in ReverseIndex.ipynb. 
-  Execute the function before starting to work with a search engine.
+  1. You need to create inverted_index from documents, idf and normilized_tf_idf before starting to work with a search engine.
+  2. request to service Ranking -> receive json with key "ranked" - list with ranked docIDs.
 
 Return: processed_data - dictionary with docID's and texts (number of docID == max_docs). {'id': docID, 'text': text}
+
+# Service Ranking : executes ranking by using cosine between two vectors.
+Port: 13541
+
+Before using this service for ranking you must create idf and normalized tf_idf from inverted index by using ReverseIndex Service.
+
+Input: 
+ - documents - list with relevant docID
+ - words - list with tokens from the query. 
+
+Return: ranked - list with ranked docIDs
 
 # Snippets service : creates snippet - first sentence which contains any term from query.
 Port: 13542
