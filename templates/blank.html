@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>First app</title>
     <link rel="stylesheet" href="static/style.css">
     <style>
@@ -10,7 +11,7 @@
         margin-top: 30px;
         font-size: 24px;
         margin-left: 30px;
-        width: 60%;
+        width: 85%;
         overflow: hidden;
         background-color: white;
     }
@@ -18,7 +19,7 @@
     #sorry {
         font-size:14px;
         margin-left: 30px;
-        width: 60%;
+        width: 85%;
         overflow: hidden;
         background-color: white;
     }
@@ -33,35 +34,96 @@
 
 
    input[type=text] {
-        width: 60%;
+        width: 90%;
         margin-left: 25px;
         margin-top: 15px;
         box-sizing: border-box;
         border: 1px solid #ccc;
         border-radius: 4px;
-        font-size: 12px;
+        font-size: 14px;
         background-color: white;
         padding: 12px 20px 12px 20px;
-    }              
+    }     
+    #cat {
+            margin-bottom: 15px;          
+        }
+       
+    /* Create two unequal columns that floats next to each other */
+        .column {
+            float: left;
+        }
+        
+        /* Left column */
+        .column.left {
+            width: 65%;
+        }
+        /* Right column */
+        .column.right {
+            width: 35%;
+        }
+        
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     </style>   
 </head>
 
 <body>
-    <form method=post action="/search">
-        <input type="text" name="query" placeholder="{{ old_query }}">               
-    </form>
-            
-    <div id="answer">
-      <div id='block'>
-          <div><i>The answer is 42!</i></div>
-      </div>   
-    </div>
+    <form method=post action="/search" name="Input">
+    <div class="row">
+        
+        
+        <div class="column left">                
+                <input type="text" name="query" placeholder="{{ old_query }}">  
+                <div id="answer">
+                  <div id='block'>
+                      <div><i>The answer is 42!</i></div>
+                  </div>   
+                </div>
     
-     <div id="sorry">
-      <div id='block'>
-          <div>Sorry we can't help you. Try another query. </div>
-      </div>   
-    </div>   
-  
+        <div id="sorry">
+             <div id='block'>
+              <div>Sorry we can't help you. Try another query. </div>
+              </div>   
+        </div> 
+        </div>
+        
+        <div class="column right">
+            <div style='margin-top: 90px; margin-left:5px;'>
+                <h3>Free! Only today you can choose category:</h3>
+                
+                  <input type="checkbox" name="category" value="bank" id='cat'> Банки, инвестиции, лизинг<br>
+                  <input type="checkbox" name="category" value="lawyer" id='cat'> Юристы<br>
+                  <input type="checkbox" name="category" value="it" id='cat'> Информационные технологии, интернет, телеком<br>
+                  <input type="checkbox" name="category" value="science" id='cat'> Наука, образование<br> 
+                  <input type="checkbox" name="category" value="production" id='cat'> Производство<br> 
+                  <input type="checkbox" name="category" value="fitness" id='cat'> Спортивные клубы, фитнес, салоны красоты<br> 
+                  <input type="checkbox" name="category" value="restaurant" id='cat'> Туризм, гостиницы, рестораны<br> 
+                  <input type="checkbox" name="category" value="none" id='cat' checked hidden><br>                                         
+                
+            </div>
+        </div>    
+            
+           
+</div>   
+</form>  
+    <script>
+        var f = document.forms.Input;
+        f.onchange = function() {
+          var n = f.querySelectorAll('[type="checkbox"]'),
+              l = f.querySelectorAll('[type="checkbox"]:checked');
+          for(var j=0; j<n.length; j++)
+            if (l.length >= 2) { // если отметить одну и более галочки
+              n[j].disabled = true; // все чекбоксы становятся disabled
+              for(var i=0; i<l.length; i++)
+                l[i].disabled = false; // но disabled убирается с помеченных галочками чекбоксов
+            } else {
+              n[j].disabled = false; // если выделить менее одной галочек, то disabled снимается со всех чекбоксов
+            }
+        }
+    </script>
 </body>
 </html>
