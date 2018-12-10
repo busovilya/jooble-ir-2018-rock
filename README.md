@@ -1,5 +1,8 @@
-Run all services mentioned above and open UI client to do search. 
-
+1. git clone https://github.com/ian-jooble/jooble-ir-2018-rock.git
+2. pip install requrements.txt
+3. Run services mentioned above python "server_name".py
+4. python client.py
+    
 # Search service : main manager for all workflow.
 Port: port 13565
 
