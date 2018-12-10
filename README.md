@@ -15,7 +15,7 @@ Actions:
 Return: 
 - documents - dictionary with docID's and snippets.
 
-# Service ReverseIndex : executes search by term in inverted index.
+# Service Indexer : executes search by term in inverted index.
 Port: 13538
 
 Input: 
@@ -47,7 +47,7 @@ Input:
 
 Return: processed_data - dictionary with docID's and snippets. {'id': docID, 'snippet': snippet}
 
-# Service Client_UI : creates UI for receiving user queries and displaying search results.
+# Service Client : creates UI for receiving user queries and displaying search results.
 Port: 13560
 
 You can change 'max_docs' here.
