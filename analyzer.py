@@ -67,11 +67,14 @@ tokenizer = Tokenizer()
 def normalize(query):
     if query is None:
         return None
-        
-    languge = langDetector.detect(query)
-    tokenized = tokenizer.tokenize(query)
-    sw = StopWords(languge)
-    stemmer = Stemmer(languge)
-    without_stop_words = sw.dropStopWords(tokenized)
-    stemmed = [stemmer.stemWords(sent) for sent in without_stop_words]
-    return stemmed
+    
+    try:
+        languge = langDetector.detect(query)
+        tokenized = tokenizer.tokenize(query)
+        sw = StopWords(languge)
+        stemmer = Stemmer(languge)
+        without_stop_words = sw.dropStopWords(tokenized)
+        stemmed = [stemmer.stemWords(sent) for sent in without_stop_words]
+        return stemmed
+    except:
+        return ''

@@ -5,7 +5,7 @@ import configparser
 from flask import Flask, render_template
 from flask import request
 
-from SpellChecker import QueryChecker
+from spellchecker import QueryChecker
 
 spell_cheker = QueryChecker()
 config = configparser.ConfigParser()

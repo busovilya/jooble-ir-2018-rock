@@ -13,7 +13,7 @@ from flask import request
 import pandas as pd
 import numpy as np
 
-from Document import Document
+from document import Document
 from analyzer import normalize
 
 
@@ -123,7 +123,8 @@ def intersect_all(terms, inverted_index):
 
 
 def add_to_revesed_index(row):
-    global inverted_index
+    global inverted_index 
+
     doc = dict()
     doc['docID'] = int(row['id'])
         
@@ -170,7 +171,8 @@ def reverseindex():
     words = json_data['data']
     category = json_data['category']
     documents = list()
-    
+
+
     if words is None and category:
         documents = docs.loc[docs['profarea'] == category, 'id'].tolist()
     else:    
@@ -221,6 +223,21 @@ def reverseindex():
     return json.dumps({"status":"ok", "got_data":json_data['data'], 
                        "processed_data": ranked_documents, "position": pos})
 
+@app.route("/reverseindex/read", methods=['POST'])
+def read():
+    global docs
+    global inverted_index
+    docs = pd.read_csv(config['Data']['Path'] + 'documents.csv', sep='\t')
+
+    with open(config['Data']['Path']+'reverse_index.pickle', 'rb') as file:
+        inverted_index = pickle.load(file)
+
+    dict_idf = idf(inverted_index)
+    dict_tf_idf = normalized_tf_idf_docs(inverted_index, docs, dict_idf)    
+    requests.post(f"http://127.0.0.1:{config['Ranking']['Port']}/rank/idf", json={'idf' : dict_idf,
+                                                           'tf_idf': dict_tf_idf})
+    return json.dumps({"status":"ok"}, ensure_ascii=False)
+
 
 @app.route("/reverseindex/add", methods=['POST'])
 def add():
@@ -228,9 +245,12 @@ def add():
     global inverted_index
         
     docs_new = pd.read_csv(config['Data']['Path'] + 'documents.csv', sep='\t')
-    docs_new = docs_new.iloc[:100,:]
+    docs_new = docs_new.iloc[60000:,:]
 
-    docs_new.apply(lambda row: add_to_revesed_index(row), axis=1)                
+    docs_new.apply(lambda row: add_to_revesed_index(row), axis=1)
+
+    with open('reversed_index_6.pickle', 'wb') as file:
+        pickle.dump(inverted_index, file)                
             
     docs = docs.append(docs_new)
     # refresh idf and sent into service for ranking  
