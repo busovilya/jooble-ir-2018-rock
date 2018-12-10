@@ -1,9 +1,12 @@
 import json
+import configparser
 
 import numpy as np
 from flask import Flask, request
 
 app = Flask(__name__)
+config = configparser.ConfigParser()
+config.read('config.ini')
 '''
 Service for ranking.
 Input - list with relevant docIDS, list with tokens 
@@ -25,24 +28,25 @@ def ranking():
     # list with tokens from the query:
     words = j['words']
     
-    # dictionary with tf_idf for query:
-    tf_idf_query = {term: idf[term] / len(set(words)) for term in words}
-    # normalization:
-    norm = (sum([i ** 2 for i in tf_idf_query.values()])) **.5
-    tf_idf_query = {term: tf_idf_query[term] / norm for term in words}
-    print('tf_idf_query', tf_idf_query)      
-   
-    cos = {key: 0 for key in documents}
-    for docID in documents:
-        print(tf_idf[str(docID)])
-        cos[docID] = sum([tf_idf_query[term] * tf_idf[str(docID)][term] 
-                          for term in words])
-    print('cos', cos)
+    cos = {key: 0 for key in documents}    
+    if words is None:
+        for docID in documents:
+            cos[docID] = sum(tf_idf[str(docID)].values())
+    else:    
+        # dictionary with tf_idf for query:
+        tf_idf_query = {term: idf[term] / len(set(words)) for term in words}
+        # normalization:
+        norm = (sum([i ** 2 for i in tf_idf_query.values()])) **.5
+        tf_idf_query = {term: tf_idf_query[term] / norm for term in words}
+        
+        for docID in documents:
+            print(docID)
+            cos[docID] = sum([tf_idf_query[term] * tf_idf[str(docID)][term] 
+                              for term in words])
     
     # sorting documents
     ranked = sorted(cos.items(), key=lambda kv: kv[1], reverse = True)
     ranked = [d[0] for d in ranked]
-    print('ranked',ranked)
       
     return json.dumps({'status':'ok', 'ranked': ranked})
 
@@ -69,4 +73,4 @@ def refresh_idf():
     return json.dumps({'status':'ok'})
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=13541)
+    app.run(host='0.0.0.0', port=config['Ranking']['Port'])

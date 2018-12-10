@@ -1,11 +1,14 @@
 import json
 import string
 import requests
+import configparser
 
 from flask import Flask, request
 from nltk.tokenize import sent_tokenize
 
 app = Flask(__name__)
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 '''
 This service makes snippets for documentss
@@ -27,6 +30,8 @@ def snippets():
         
         if len(pos) != 0:
             doc['snippet'] = sentences[pos[0]]
+            if len(doc['snippet']) > 200:
+                doc['snippet'] = doc['snippet'][:200] + '...'
         else:
             # if we can't find the word in text (it can be in title)
             doc['snippet'] = sentences[0]
@@ -37,4 +42,4 @@ def snippets():
     
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=13542)
+    app.run(host='0.0.0.0', port=config['Snippets']['Port'])

@@ -122,6 +122,36 @@ def intersect_all(terms, inverted_index):
     return ans
 
 
+def add_to_revesed_index(row):
+    global inverted_index
+    doc = dict()
+    doc['docID'] = int(row['id'])
+        
+    doc['text_searchable'] = normalize(row['text'])
+    doc['title_searchable'] = normalize(row['title'])
+        
+    tokens_text = doc['text_searchable']
+    tokens_title = doc['title_searchable']
+
+    tokens_text_flat = [item for sublist in tokens_text for item in sublist]
+    tokens_title_flat = [item for sublist in tokens_title for item in sublist]
+                
+    number_of_occurrences = Counter(tokens_text_flat + tokens_title_flat)         
+    for term in set(tokens_text_flat + tokens_title_flat):
+        if term not in inverted_index:            
+            inverted_index[term] = [Document(doc['docID'],
+                                                  number_of_occurrences[term],
+                                                  term,
+                                                  tokens_text,
+                                                  tokens_title)] 
+        else:
+            inverted_index[term].append(Document(doc['docID'],
+                                                     number_of_occurrences[term],
+                                                     term,
+                                                     tokens_text,
+                                                     tokens_title))
+
+
 inverted_index = dict()
 read_files = set()
 docs = pd.DataFrame()
@@ -136,11 +166,10 @@ app = Flask(__name__)
 def reverseindex():
     global docs
     global inverted_index
-
     json_data = request.json
     words = json_data['data']
     category = json_data['category']
-    print(words)
+    documents = list()
     
     if words is None and category:
         documents = docs.loc[docs['profarea'] == category, 'id'].tolist()
@@ -157,10 +186,10 @@ def reverseindex():
         if category:
             category_id = docs.loc[docs['profarea'] == category, 'id'].tolist()
             documents = [docID for docID in documents if docID in category_id]
-    
+
     # ranking if len(documents) is more than one
     if len(documents) > 1:
-        response_ranked = requests.post('http://127.0.0.1:13541/rank',
+        response_ranked = requests.post(f"http://127.0.0.1:{config['Ranking']['Port']}/rank",
                                         json={'documents': documents,
                                               'words': words})
         parsed_ranked = json.loads(response_ranked.text)
@@ -175,18 +204,19 @@ def reverseindex():
             
     # index of sentences(first/second/etc) in which there are words from query for every doc
     pos = {key: [] for key in documents}
-    for term in words:        
-        p = inverted_index.get(term)
-        for docID in documents:
-            for d in p:
-                if d.id == int(docID):
-                    pos[docID] += d.position_sentence
+    if words is not None:
+        for term in words:        
+            p = inverted_index.get(term)
+            for docID in documents:
+                for d in p:
+                    if d.id == int(docID):
+                        pos[docID] += d.position_sentence
                           
     # get text of found documentss
     ranked_documents = []
     for document in documents:
         ranked_documents += docs.loc[docs['id'] == int(document),
-                                     ['id', 'title', 'text', 'url']].to_dict('records')
+                                     ['id', 'title', 'text', 'url', 'profarea']].to_dict('records')
       
     return json.dumps({"status":"ok", "got_data":json_data['data'], 
                        "processed_data": ranked_documents, "position": pos})
@@ -197,37 +227,10 @@ def add():
     global docs
     global inverted_index
         
-    docs_new = pd.read_csv('documents.csv', sep='\t')
-    docs_new = docs_new.iloc[:100, :]
+    docs_new = pd.read_csv(config['Data']['Path'] + 'documents.csv', sep='\t')
+    docs_new = docs_new.iloc[:100,:]
 
-    for index, row in docs_new.iterrows():
-        doc = dict()
-        doc['docID'] = int(row['id'])
-        
-        doc['text_searchable'] = normalize(row['text'])
-        doc['title_searchable'] = normalize(row['title'])
-        
-        tokens_text = doc['text_searchable']
-        tokens_title = doc['title_searchable']
-
-        tokens_text_flat = [item for sublist in tokens_text for item in sublist]
-        tokens_title_flat = [item for sublist in tokens_title for item in sublist]
-                
-        number_of_occurrences = Counter(tokens_text_flat + tokens_title_flat)         
-        for term in set(tokens_text_flat + tokens_title_flat):
-            if term not in inverted_index:            
-                inverted_index[term] = [Document(doc['docID'],
-                                                  number_of_occurrences[term],
-                                                  term,
-                                                  tokens_text,
-                                                  tokens_title)] 
-            else:
-                inverted_index[term].append(Document(doc['docID'],
-                                                     number_of_occurrences[term],
-                                                     term,
-                                                     tokens_text,
-                                                     tokens_title))
-                
+    docs_new.apply(lambda row: add_to_revesed_index(row), axis=1)                
             
     docs = docs.append(docs_new)
     # refresh idf and sent into service for ranking  
@@ -235,7 +238,7 @@ def add():
     #create idf and normilized tf_idf from saved inverted_index
     dict_idf = idf(inverted_index)
     dict_tf_idf = normalized_tf_idf_docs(inverted_index, docs, dict_idf)    
-    requests.post('http://127.0.0.1:13541/rank/idf', json={'idf' : dict_idf,
+    requests.post(f"http://127.0.0.1:{config['Ranking']['Port']}/rank/idf", json={'idf' : dict_idf,
                                                            'tf_idf': dict_tf_idf})
 
 
@@ -244,4 +247,4 @@ def add():
         
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=13538)
+    app.run(host='0.0.0.0', port=config['Indexer']['Port'])

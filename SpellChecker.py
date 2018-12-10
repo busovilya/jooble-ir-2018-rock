@@ -1,5 +1,6 @@
 import re
 import json
+from json import JSONDecodeError
 import os
 import requests
 import pickle
@@ -100,54 +101,39 @@ class SpellChecker:
         
  
  # create model for spell checking
-'''
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 path = config['Data']['Path']
-'''
 
 all_words = list()  
-for root, dirs, files in os.walk("../Data"):  
-    for filename in files:
-        if 'list_of_words' in filename:
-            with open('../Data/' + filename, 'rb') as file:
-                try: 
-                    all_words += pickle.load(file)
-                except JSONDecodeError:
-                    print("Can't read file " + filename)
-    
-probability_dist = Counter(all_words)
-N = sum(probability_dist.values())
-for key in probability_dist:
-    probability_dist[key] /= N
-    
-sc = SpellChecker(probability_dist)
+with open(path + 'list_of_words.pickle', 'rb') as file:
+    all_words += pickle.load(file)
 
-app = Flask(__name__)
+    
+    
+class QueryChecker:
+    def __init__(self):
+        probability_dist = Counter(all_words)
+        N = sum(probability_dist.values())
+        for key in probability_dist:
+            probability_dist[key] /= N
+    
+        self.spell_checker = SpellChecker(probability_dist)
 
-@app.route("/spellchecker", methods=["POST"])
-def checking():
-    json_data = request.json
-    query = json_data['query']
+    def check(self, query):
+        tokenized = tokenizer.tokenize(query) 
+    
+        # words - list of tokens from query
+        words = [item for sublist in tokenized for item in sublist]
+        # create list of correct words
+        correct_words = self.spell_checker.correct(words)
         
-    # tokenizing (create list of lists where each list is separate token)
-    tokenized = tokenizer.tokenize(query) 
-    
-    # words - list of tokens from query
-    words = [item for sublist in tokenized for item in sublist]
-    # create list of correct words
-    correct_words = sc.correct(words)
-    
-    state = 0
-    correct_query = query
-    for i in zip(words, correct_words):
-        if i[0] != i[1]:
-            state = 1
-            correct_query = ' '.join(correct_words)
+        state = 0
+        correct_query = query
+        for i in zip(words, correct_words):
+            if i[0] != i[1]:
+                state = 1
+                correct_query = ' '.join(correct_words)
         
-    return json.dumps({"status":"ok", "got_data":json_data['query'], 
-                       "processed_data": correct_query, "state": state}, ensure_ascii=False)
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=13539)
+        return {'query': correct_query, 'state':state}

@@ -65,6 +65,9 @@ langDetector = LanguageDetector()
 tokenizer = Tokenizer()
 
 def normalize(query):
+    if query is None:
+        return None
+        
     languge = langDetector.detect(query)
     tokenized = tokenizer.tokenize(query)
     sw = StopWords(languge)

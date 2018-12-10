@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>First app</title>
-    <link rel="stylesheet" href="static/style.css">  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+    <link rel="stylesheet" href="static/style.css">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        
+
+        .autocomplete-items {
+            position: absolute;
+            margin-left: 100px;
+            }
+
         * {
             box-sizing: border-box;
         }
@@ -75,78 +85,92 @@
             display: table;
             clear: both;
         }
-    </style>   
+    </style>
 </head>
 
-<body>    
-    <form method=post action="/search" name="Input">
-    <div class="row">        
-        <div class="column left">            
+<body>
+
+    <!--Make sure the form has the autocomplete function switched off:-->
+    <form method=post action="/search" name="Input" autocomplete="off" class="autocomplete">
+        <div class="row">
+            <div class="column left">
                 <div style='margin-top:45px;'>
-                    <input type="text" name="query" placeholder="Search.." id='query'>
+                    <input id="query" type="text" name="query" placeholder="Looking for...">
                 </div>
                 <div style='margin-top:15px;'>
-                    <input type=submit value='Search' name='submit_btn' id='submit' style='font-size:20px;'>
+                    <input type="submit" value='Search' name='submit_btn' id='submit' style='font-size:20px;'>
                 </div>
-        </div>
-
-        <div class="column right">
-            <div style='margin-top:45px; margin-left:5px;'>
-                
-                <h3>Free! Only today you can choose category:</h3>   
-                  <input type="checkbox" name="category" value="Банки, инвестиции, лизинг" id='cat'> Банки, инвестиции, лизинг<br>
-                  <input type="checkbox" name="category" value="Юристы" id='cat'> Юристы<br>
-                  <input type="checkbox" name="category" value="Информационные технологии, интернет, телеком" id='cat'> Информационные технологии, интернет, телеком<br>
-                  <input type="checkbox" name="category" value="Наука, образование" id='cat'> Наука, образование<br> 
-                  <input type="checkbox" name="category" value="Производство" id='cat'> Производство<br> 
-                  <input type="checkbox" name="category" value="Спортивные клубы, фитнес, салоны красоты" id='cat'> Спортивные клубы, фитнес, салоны красоты<br> 
-                  <input type="checkbox" name="category" value="Туризм, гостиницы, рестораны" id='cat'> Туризм, гостиницы, рестораны<br>
-                  <input type="checkbox" name="category" value="Бухгалтерия, управленческий учет, финансы предприятия" id='cat'> Бухгалтерия, управленческий учет, финансы предприятия<br>
-                  <input type="checkbox" name="category" value="Начало карьеры, студенты" id='cat'> Начало карьеры, студенты<br>
-                  <input type="checkbox" name="category" value="Управление персоналом, тренинги" id='cat'> Управление персоналом, тренинги<br>
-                  <input type="checkbox" name="category" value="Продажи" id='cat'> Продажи<br>
-                  <input type="checkbox" name="category" value="Транспорт, логистика" id='cat'> Транспорт, логистика<br>
-                  <input type="checkbox" name="category" value="Медицина, фармацевтика" id='cat'> Медицина, фармацевтика<br>
-                  <input type="checkbox" name="category" value="Высший менеджмент" id='cat'> Высший менеджмент<br>
-                  <input type="checkbox" name="category" value="Маркетинг, реклама, PR" id='cat'> Маркетинг, реклама, PR<br>
-                  <input type="checkbox" name="category" value="Автомобильный бизнес" id='cat'> Автомобильный бизнес<br>
-                  <input type="checkbox" name="category" value="Закупки" id='cat'> Закупки<br>
-                  <input type="checkbox" name="category" value="Строительство, недвижимость" id='cat'> Строительство, недвижимость<br>
-                  <input type="checkbox" name="category" value="Рабочий персонал" id='cat'> Рабочий персонал<br>
-                  <input type="checkbox" name="category" value="Административный персонал" id='cat'> Административный персонал<br>
-                  <input type="checkbox" name="category" value="Инсталляция и сервис" id='cat'> Инсталляция и сервис<br>
-                  <input type="checkbox" name="category" value="Безопасность" id='cat'> Безопасность<br>
-                  <input type="checkbox" name="category" value="Искусство, развлечения, масс-медиа" id='cat'> Искусство, развлечения, масс-медиа<br>
-                  <input type="checkbox" name="category" value="Консультирование" id='cat'> Консультирование<br>
-                  <input type="checkbox" name="category" value="Страхование" id='cat'> Страхование<br>
-                  <input type="checkbox" name="category" value="Государственная служба, некоммерческие организации" id='cat'> Государственная служба, некоммерческие организации<br>
-                  <input type="checkbox" name="category" value="Домашний персонал" id='cat'> Домашний персонал<br>
-                  <input type="checkbox" name="category" value="Добыча сырья" id='cat'> Добыча сырья<br>
-                  <input type="checkbox" name="category" value="none" id='cat' checked hidden><br>                
-               
             </div>
-             
+            <div class="column right">
+                <div>
+
+                </div>
+                <div style='margin-top:90px; margin-left:5px;'>
+
+                    <h3>Free! Only today you can choose category:</h3>
+                    <input type="checkbox" name="category" value="Банки, инвестиции, лизинг" id='cat'> Банки,
+                    инвестиции, лизинг<br>
+                    <input type="checkbox" name="category" value="Юристы" id='cat'> Юристы<br>
+                    <input type="checkbox" name="category" value="Информационные технологии, интернет, телеком" id='cat'>
+                    Информационные технологии, интернет, телеком<br>
+                    <input type="checkbox" name="category" value="Наука, образование" id='cat'> Наука,
+                    образование<br>
+                    <input type="checkbox" name="category" value="Производство" id='cat'> Производство<br>
+                    <input type="checkbox" name="category" value="Спортивные клубы, фитнес, салоны красоты" id='cat'>
+                    Спортивные клубы, фитнес, салоны красоты<br>
+                    <input type="checkbox" name="category" value="Туризм, гостиницы, рестораны" id='cat'>
+                    Туризм, гостиницы, рестораны<br>
+                    <input type="checkbox" name="category" value="Бухгалтерия, управленческий учет, финансы предприятия"
+                        id='cat'> Бухгалтерия, управленческий учет, финансы предприятия<br>
+                    <input type="checkbox" name="category" value="Начало карьеры, студенты" id='cat'> Начало
+                    карьеры, студенты<br>
+                    <input type="checkbox" name="category" value="Управление персоналом, тренинги" id='cat'>
+                    Управление персоналом, тренинги<br>
+                    <input type="checkbox" name="category" value="Продажи" id='cat'> Продажи<br>
+                    <input type="checkbox" name="category" value="Транспорт, логистика" id='cat'> Транспорт,
+                    логистика<br>
+                    <input type="checkbox" name="category" value="Медицина, фармацевтика" id='cat'> Медицина,
+                    фармацевтика<br>
+                    <input type="checkbox" name="category" value="Высший менеджмент" id='cat'> Высший
+                    менеджмент<br>
+                    <input type="checkbox" name="category" value="Маркетинг, реклама, PR" id='cat'> Маркетинг,
+                    реклама, PR<br>
+                    <input type="checkbox" name="category" value="Автомобильный бизнес" id='cat'> Автомобильный
+                    бизнес<br>
+                    <input type="checkbox" name="category" value="Закупки" id='cat'> Закупки<br>
+                    <input type="checkbox" name="category" value="Строительство, недвижимость" id='cat'>
+                    Строительство, недвижимость<br>
+                    <input type="checkbox" name="category" value="Рабочий персонал" id='cat'> Рабочий персонал<br>
+                    <input type="checkbox" name="category" value="Административный персонал" id='cat'>
+                    Административный персонал<br>
+                    <input type="checkbox" name="category" value="Инсталляция и сервис" id='cat'> Инсталляция и
+                    сервис<br>
+                    <input type="checkbox" name="category" value="Безопасность" id='cat'> Безопасность<br>
+                    <input type="checkbox" name="category" value="Искусство, развлечения, масс-медиа" id='cat'>
+                    Искусство, развлечения, масс-медиа<br>
+                    <input type="checkbox" name="category" value="Консультирование" id='cat'> Консультирование<br>
+                    <input type="checkbox" name="category" value="Страхование" id='cat'> Страхование<br>
+                    <input type="checkbox" name="category" value="Государственная служба, некоммерческие организации"
+                        id='cat'> Государственная служба, некоммерческие организации<br>
+                    <input type="checkbox" name="category" value="Домашний персонал" id='cat'> Домашний
+                    персонал<br>
+                    <input type="checkbox" name="category" value="Добыча сырья" id='cat'> Добыча сырья<br>
+                    <input type="checkbox" name="category" value="none" id='cat' checked hidden><br>
+                </div>
+            </div>
         </div>
-       
-    </div> 
-    </form> 
+    </form>
+
     <script>
-        var f = document.forms.Input;
-        f.onchange = function() {
-          var n = f.querySelectorAll('[type="checkbox"]'),
-              l = f.querySelectorAll('[type="checkbox"]:checked');
-          for(var j=0; j<n.length; j++)
-            if (l.length >= 2) { // если отметить одну и более галочки
-              n[j].disabled = true; // все чекбоксы становятся disabled
-              for(var i=0; i<l.length; i++)
-                l[i].disabled = false; // но disabled убирается с помеченных галочками чекбоксов
-            } else {
-              n[j].disabled = false; // если выделить менее одной галочки, то disabled снимается со всех чекбоксов
+        $('#query[type=text]').on('keydown', function (e) {
+            if (e.which == 13) {
+                $(document.forms.Input).submit();
             }
-        }
+        });
+        $(document).ready(function () {
+            autocomplete(document.getElementById("query"), words);
+        })
     </script>
 </body>
-   
-
 
 </html>
