@@ -1,3 +1,6 @@
+import configparser
+import re
+
 from flask import Flask
 from flask import jsonify
 from flask import request
@@ -17,9 +20,15 @@ with open('../title_words.pickle', 'rb') as file:
 
 @app.route('/similar', methods=['POST'])
 def similar():
-    word = request.json['query']
-    word_pos = model_ru.parse(word)[0].tag.POS
-    similar_words = model_w2v_ru.most_similar(word+'_'+word_pos)
+    words = re.findall('\w+', request.json['query'])
+    word_pos = []
+    similar_words = []
+
+    for word in words:
+        word_pos = model_ru.parse(word)[0].tag.POS
+        similar_words.append(model_w2v_ru.most_similar(word+'_'+word_pos))
+    
+    similar_words = [word for el in similar_words for word in el]
     words = list(map(lambda x:x[0].split('_')[0], similar_words))
 
     words_in_title = []

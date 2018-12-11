@@ -203,6 +203,10 @@ def reverseindex():
     
     # need this because type(docs['id']) is string in this dataFrame
     documents = [x for x in documents]
+
+    #delete trash
+    documents = [docID for docID in documents if 
+                (docs.loc[docs['id'] == docID].trash == 0).bool()]
             
     # index of sentences(first/second/etc) in which there are words from query for every doc
     pos = {key: [] for key in documents}
@@ -245,7 +249,6 @@ def add():
     global inverted_index
         
     docs_new = pd.read_csv(config['Data']['Path'] + 'documents.csv', sep='\t')
-    docs_new = docs_new.iloc[60000:,:]
 
     docs_new.apply(lambda row: add_to_revesed_index(row), axis=1)
 

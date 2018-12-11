@@ -10,10 +10,12 @@
 
     <style>
 
-        .autocomplete-items {
+
+    .autocomplete-items {
             position: absolute;
-            margin-left: 20px;
-            }
+            margin-left: 30px;
+            background-color: white;
+    }
         
     * {
         box-sizing: border-box;
@@ -115,7 +117,7 @@
                     {% for doc in documents %}
                     <div id='block'>
                         <a id='title' href='{{ doc.url }}' target="_blank">{{ doc.title }}</a>
-                        <p>{{doc.profarea}}</p>
+                        <br><small style="color: grey;">{{doc.profarea}}</small>
                         <div>{{ doc.snippet }}</div>
                       </div>
                 {% endfor %}
@@ -124,14 +126,12 @@
         
         <div class="column right">
             <div style='margin-top: 90px; margin-left:5px;'>
-                <h3>Free! Only today you can choose category:</h3>
-                
+                <h3>Free! Only today you can choose category:</h3> 
                   <input type="checkbox" name="category" value="Банки, инвестиции, лизинг" id='cat'> Банки, инвестиции, лизинг<br>
                   <input type="checkbox" name="category" value="Юристы" id='cat'> Юристы<br>
                   <input type="checkbox" name="category" value="Информационные технологии, интернет, телеком" id='cat'> Информационные технологии, интернет, телеком<br>
                   <input type="checkbox" name="category" value="Наука, образование" id='cat'> Наука, образование<br> 
                   <input type="checkbox" name="category" value="Производство" id='cat'> Производство<br> 
-                  <input type="checkbox" name="category" value="Спортивные клубы, фитнес, салоны красоты" id='cat'> Спортивные клубы, фитнес, салоны красоты<br> 
                   <input type="checkbox" name="category" value="Туризм, гостиницы, рестораны" id='cat'> Туризм, гостиницы, рестораны<br>
                   <input type="checkbox" name="category" value="Бухгалтерия, управленческий учет, финансы предприятия" id='cat'> Бухгалтерия, управленческий учет, финансы предприятия<br>
                   <input type="checkbox" name="category" value="Начало карьеры, студенты" id='cat'> Начало карьеры, студенты<br>
