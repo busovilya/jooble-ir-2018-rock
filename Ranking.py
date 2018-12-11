@@ -30,6 +30,7 @@ def ranking():
     
     cos = {key: 0 for key in documents}    
     if words is None:
+        
         for docID in documents:
             cos[docID] = sum(tf_idf[str(docID)].values())
     else:    
