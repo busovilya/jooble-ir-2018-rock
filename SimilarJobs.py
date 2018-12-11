@@ -9,13 +9,15 @@ from gensim.models import KeyedVectors
 import pickle
 from flask_cors import CORS
 
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, send_wildcard=True)
 
 model_w2v_ru = KeyedVectors.load_word2vec_format('../web_0_300_20.bin', binary=True)
 model_ru = pymorphy2.MorphAnalyzer()
-with open('../title_words.pickle', 'rb') as file:
+with open(config['Data']['Path']+'title_words.pickle', 'rb') as file:
     title_words = pickle.load(file)
 
 @app.route('/similar', methods=['POST'])
